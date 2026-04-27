@@ -28,7 +28,7 @@ from .constants import (
 )
 from .custom_exceptions import APIExecutionError, APIInputError, ConfigurationError
 from .gemini_flash_image_api import GeminiFlashImageAPI
-from .gemini_pro_image_api import GeminiProImageAPI
+
 
 
 class Gemini25FlashImage:
@@ -267,8 +267,8 @@ class Gemini31FlashImage:
         return {
             "required": {
                 "model": (
-                    [GeminiProImageModel.GEMINI_31_FLASH_IMAGE.name],
-                    {"default": GeminiProImageModel.GEMINI_31_FLASH_IMAGE.name},
+                    [GeminiFlashImageModel.GEMINI_31_FLASH_IMAGE.name],
+                    {"default": GeminiFlashImageModel.GEMINI_31_FLASH_IMAGE.name},
                 ),
                 "prompt": (
                     "STRING",
@@ -278,22 +278,7 @@ class Gemini31FlashImage:
                     },
                 ),
                 "aspect_ratio": (
-                    [
-                        "1:1",
-                        "1:4",
-                        "4:1",
-                        "1:8",
-                        "8:1",
-                        "2:3",
-                        "3:2",
-                        "3:4",
-                        "4:3",
-                        "4:5",
-                        "5:4",
-                        "9:16",
-                        "16:9",
-                        "21:9",
-                    ],
+                    GEMINI_31_FLASH_IMAGE_ASPECT_RATIO,
                     {"default": "16:9"},
                 ),
                 "image_size": (
@@ -439,7 +424,7 @@ class Gemini31FlashImage:
             RuntimeError: If API configuration fails, or if image generation encounters an API error.
         """
         try:
-            gemini_pro_image_api = GeminiProImageAPI(
+            gemini_flash_image_api = GeminiFlashImageAPI(
                 project_id=gcp_project_id, region=gcp_region
             )
         except ConfigurationError as e:
@@ -455,7 +440,7 @@ class Gemini31FlashImage:
             )
 
         try:
-            pil_images = gemini_pro_image_api.generate_image(
+            pil_images = gemini_flash_image_api.generate_image(
                 model=model,
                 aspect_ratio=aspect_ratio,
                 image_size=image_size,
