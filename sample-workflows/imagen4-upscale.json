@@ -1,83 +1,15 @@
 {
   "id": "4e9f33d3-9cca-41f1-9cc4-da94f9b19800",
   "revision": 0,
-  "last_node_id": 23,
-  "last_link_id": 20,
+  "last_node_id": 25,
+  "last_link_id": 21,
   "nodes": [
-    {
-      "id": 21,
-      "type": "LoadImage",
-      "pos": [
-        -1281.2830867816572,
-        -478.04045304950904
-      ],
-      "size": [
-        282.798828125,
-        314
-      ],
-      "flags": {},
-      "order": 0,
-      "mode": 0,
-      "inputs": [],
-      "outputs": [
-        {
-          "name": "IMAGE",
-          "type": "IMAGE",
-          "links": [
-            19
-          ]
-        },
-        {
-          "name": "MASK",
-          "type": "MASK",
-          "links": null
-        }
-      ],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.20.1",
-        "Node name for S&R": "LoadImage"
-      },
-      "widgets_values": [
-        "input/upscale/nature_morte.png",
-        "image"
-      ]
-    },
-    {
-      "id": 23,
-      "type": "PreviewImage",
-      "pos": [
-        -468.13927566162795,
-        -503.83908266801893
-      ],
-      "size": [
-        525.150241894883,
-        359.51315739278687
-      ],
-      "flags": {},
-      "order": 2,
-      "mode": 0,
-      "inputs": [
-        {
-          "name": "images",
-          "type": "IMAGE",
-          "link": 20
-        }
-      ],
-      "outputs": [],
-      "properties": {
-        "cnr_id": "comfy-core",
-        "ver": "0.20.1",
-        "Node name for S&R": "PreviewImage"
-      },
-      "widgets_values": []
-    },
     {
       "id": 22,
       "type": "Imagen4UpscaleImageNode",
       "pos": [
-        -875.7582333305745,
-        -482.6084572370477
+        -991.1897668634176,
+        -430.81225629282324
       ],
       "size": [
         314.46875,
@@ -90,7 +22,7 @@
         {
           "name": "image",
           "type": "IMAGE",
-          "link": 19
+          "link": 21
         }
       ],
       "outputs": [
@@ -115,25 +47,112 @@
         "allow_adult",
         true,
         0.5,
-        "",
+        "accelerated-platforms-dev",
         "global"
       ]
+    },
+    {
+      "id": 23,
+      "type": "PreviewImage",
+      "pos": [
+        -468.13927566162795,
+        -503.83908266801893
+      ],
+      "size": [
+        717.5361311162883,
+        473.46479947008083
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 20
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "cnr_id": "comfy-core",
+        "ver": "0.20.1",
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    },
+    {
+      "id": 25,
+      "type": "VHS_LoadImagePath",
+      "pos": [
+        -1694.6675151297852,
+        -481.79458016428003
+      ],
+      "size": [
+        644.2385854543579,
+        502.37220993873905
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "vae",
+          "shape": 7,
+          "type": "VAE",
+          "link": null
+        }
+      ],
+      "outputs": [
+        {
+          "name": "IMAGE",
+          "type": "IMAGE",
+          "links": [
+            21
+          ]
+        },
+        {
+          "name": "mask",
+          "type": "MASK",
+          "links": null
+        }
+      ],
+      "properties": {
+        "cnr_id": "comfyui-videohelpersuite",
+        "ver": "3234937ff5f3ca19068aaba5042771514de2429d",
+        "Node name for S&R": "VHS_LoadImagePath"
+      },
+      "widgets_values": {
+        "image": "input/upscale/nature_morte.png",
+        "custom_width": 0,
+        "custom_height": 0,
+        "videopreview": {
+          "hidden": false,
+          "paused": false,
+          "params": {
+            "custom_width": 0,
+            "custom_height": 0,
+            "filename": "input/upscale/nature_morte.png",
+            "type": "path",
+            "format": "video/png"
+          }
+        }
+      }
     }
   ],
   "links": [
-    [
-      19,
-      21,
-      0,
-      22,
-      0,
-      "IMAGE"
-    ],
     [
       20,
       22,
       0,
       23,
+      0,
+      "IMAGE"
+    ],
+    [
+      21,
+      25,
+      0,
+      22,
       0,
       "IMAGE"
     ]
@@ -144,11 +163,16 @@
     "ds": {
       "scale": 0.6757252339353786,
       "offset": [
-        1545.198478119309,
-        876.9255987959356
+        1958.0881942175556,
+        900.6038620847239
       ]
     },
-    "frontendVersion": "1.42.15"
+    "frontendVersion": "1.35.9",
+    "workflowRendererVersion": "LG",
+    "VHS_latentpreview": false,
+    "VHS_latentpreviewrate": 0,
+    "VHS_MetadataImage": true,
+    "VHS_KeepIntermediate": true
   },
   "version": 0.4
 }
