@@ -556,7 +556,7 @@ class GeminiNode31(VertexAIClient):
                 "gcp_region": (
                     "STRING",
                     {
-                        "default": "",
+                        "default": "global",
                         "tooltip": "GCP region for Vertex AI API",
                     },
                 ),
