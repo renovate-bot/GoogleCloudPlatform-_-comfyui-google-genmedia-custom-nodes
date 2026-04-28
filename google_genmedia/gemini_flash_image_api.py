@@ -73,11 +73,16 @@ class GeminiFlashImageAPI(VertexAIClient):
         image1: Optional[torch.Tensor] = None,
         image2: Optional[torch.Tensor] = None,
         image3: Optional[torch.Tensor] = None,
+        image4: Optional[torch.Tensor] = None,
+        image5: Optional[torch.Tensor] = None,
+        image6: Optional[torch.Tensor] = None,
+        image_size: Optional[str] = None,
+        output_mime_type: Optional[str] = None,
     ) -> List[Image.Image]:
         """Generates an image using the Gemini Flash Image model.
 
         Args:
-            model: The name of the Gemini model to use. default: gemini-2.5-flash-image-preview
+            model: The name of the Gemini model to use.
             aspect_ratio: The desired aspect ratio of the output image.
             prompt: The text prompt for image generation.
             temperature: Controls randomness in token generation.
@@ -92,6 +97,11 @@ class GeminiFlashImageAPI(VertexAIClient):
             image1: An optional primary input image tensor for image-to-image tasks.
             image2: An optional second input image tensor. Defaults to None.
             image3: An optional third input image tensor. Defaults to None.
+            image4: An optional fourth input image tensor. Defaults to None.
+            image5: An optional fifth input image tensor. Defaults to None.
+            image6: An optional sixth input image tensor. Defaults to None.
+            image_size: The desired image size for the output image.
+            output_mime_type: The desired format for the output image.
 
         Returns:
             A list of generated PIL images.
@@ -100,9 +110,18 @@ class GeminiFlashImageAPI(VertexAIClient):
             APIInputError: If input parameters are invalid.
             APIExecutionError: If the API call fails due to quota, permissions, or server issues.
         """
-        model = GeminiFlashImageModel[model]
+        if model in GeminiFlashImageModel.__members__:
+            model = GeminiFlashImageModel[model]
+        else:
+            raise ConfigurationError(f"Model {model} not supported by GeminiFlashImageAPI")
 
         generated_pil_images: List[Image.Image] = []
+
+        image_config_kwargs = {"aspect_ratio": aspect_ratio}
+        if image_size is not None:
+            image_config_kwargs["image_size"] = image_size
+        if output_mime_type is not None:
+            image_config_kwargs["output_mime_type"] = output_mime_type
 
         generate_content_config = types.GenerateContentConfig(
             temperature=temperature,
@@ -110,9 +129,7 @@ class GeminiFlashImageAPI(VertexAIClient):
             top_k=top_k,
             max_output_tokens=GEMINI_25_FLASH_IMAGE_MAX_OUTPUT_TOKEN,
             response_modalities=["TEXT", "IMAGE"],
-            image_config=types.ImageConfig(
-                aspect_ratio=aspect_ratio,
-            ),
+            image_config=types.ImageConfig(**image_config_kwargs),
             system_instruction=system_instruction,
             safety_settings=[
                 types.SafetySetting(
@@ -150,7 +167,7 @@ class GeminiFlashImageAPI(VertexAIClient):
 
         contents = [types.Part.from_text(text=prompt)]
 
-        for i, image_tensor in enumerate([image1, image2, image3]):
+        for i, image_tensor in enumerate([image1, image2, image3, image4, image5, image6]):
             if image_tensor is not None:
                 for j in range(image_tensor.shape[0]):
                     single_image = image_tensor[j].unsqueeze(0)
@@ -167,7 +184,7 @@ class GeminiFlashImageAPI(VertexAIClient):
         for part in response.candidates[0].content.parts:
             if part.text is not None:
                 logger.info(f"response is {part.text}")
-            elif part.inline_data is not None:
+            elif not part.thought and part.inline_data is not None:
                 image = Image.open(BytesIO(part.inline_data.data))
                 generated_pil_images.append(image)
 

@@ -16,6 +16,7 @@
 
 from typing import List, Optional
 
+import torch
 from google import genai
 from PIL import Image
 
@@ -63,7 +64,7 @@ class Imagen4API(VertexAIClient):
         Generate image from text prompt using Imagen4.
 
         Args:
-            model: Imagen4 model it. There are three as of Jul 1, 2025.
+            model: Imagen4 model id. There are three as of Jul 1, 2025.
             prompt: The text prompt for image generation.
             person_generation: Controls whether the model can generate people.
             aspect_ratio: The desired aspect ratio of the images.
@@ -114,4 +115,48 @@ class Imagen4API(VertexAIClient):
             add_watermark=add_watermark,
             output_image_type=output_mime_type,
             safety_filter_level=safety_filter_level,
+        )
+
+    def upscale_image(
+        self,
+        model: str,
+        image: torch.Tensor,
+        image_format: str,
+        upscale_factor: str,
+        safety_filter_level: str,
+        person_generation: str,
+        enhance_input_image: bool,
+        image_preservation_factor: float,
+    ) -> List[Image.Image]:
+        """
+        Upscale an image using Imagen4.
+
+        Args:
+            model: Imagen4 model id. There are three as of Jul 1, 2025.
+            image: The input image as a torch.Tensor (ComfyUI format).
+            image_format: The format of the input image (e.g., "PNG", "JPEG").
+            upscale_factor: The factor by which to upscale the image.
+            safety_filter_level: The safety filter strictness.
+            person_generation: Controls whether the model can generate people.
+            enhance_input_image: Whether to add an image enhancing step before upscaling.
+            image_preservation_factor: The factor by which to preserve the input image.
+
+        Returns:
+            A list of PIL Image objects. Returns an empty list on failure.
+
+        Raises:
+            APIInputError: If parameters are invalid.
+            APIExecutionError: If the API call fails due to quota, permissions, or server issues.
+        """
+        model = Imagen4Model[model]
+        return utils.upscale_image(
+            client=self.client,
+            model=model,
+            image=image,
+            image_format=image_format,
+            upscale_factor=upscale_factor,
+            safety_filter_level=safety_filter_level,
+            person_generation=person_generation,
+            enhance_input_image=enhance_input_image,
+            image_preservation_factor=image_preservation_factor,
         )
