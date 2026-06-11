@@ -806,14 +806,12 @@ class GeminiNode31(VertexAIClient):
                 f"An unexpected error occurred during response processing: {e}"
             ) from e
 
-
-
 NODE_CLASS_MAPPINGS = {
     "GeminiNode25": GeminiNode25,
-    "GeminiNode31": GeminiNode31
-    }
+    "GeminiNode31": GeminiNode31,
+}
 
 NODE_DISPLAY_NAME_MAPPINGS = {
     "GeminiNode25": "Gemini 2.5",
-    "GeminiNode31": "Gemini 3.1"
-    }
+    "GeminiNode31": "Gemini 3.1",
+}
